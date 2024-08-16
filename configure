@@ -10,6 +10,8 @@ if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
     exit 1
 fi
 
+rm -rf src/*
+
 for FILE in $(ls "${WATCHFACES_FOLDER}/$1"); do
     test "$FILE" != "settings.h" && ln -s $(readlink -f "${WATCHFACES_FOLDER}/$1/${FILE}") "src/${FILE}"
     cp "${TEMPLATES_FOLDER}/settings.h.template" "src/settings.h"
