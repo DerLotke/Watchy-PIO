@@ -1,0 +1,18 @@
+#!/bin/bash
+
+TEMPLATES_FOLDER="templates"
+WATCHFACES_FOLDER="lib/Watchy/examples/WatchFaces"
+MODULES=(7_SEG Basic DOS MacPaint Mario Pokemon StarryHorizon Tetris)
+
+# Check if user wants a module we have
+if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
+    echo "Error: $1 is not a valid watchface" >&2
+    exit 1
+fi
+
+for FILE in $(ls "${WATCHFACES_FOLDER}/$1"); do
+    test "$FILE" != "settings.h" && ln -s $(readlink -f "${WATCHFACES_FOLDER}/$1/${FILE}") "src/${FILE}"
+    cp "${TEMPLATES_FOLDER}/settings.h.template" "src/settings.h"
+done
+
+echo "Finished populating src/"

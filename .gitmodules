@@ -1,0 +1,3 @@
+[submodule "lib/Watchy"]
+	path = lib/Watchy
+	url = https://github.com/sqfmi/Watchy.git
