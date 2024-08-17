@@ -20,6 +20,7 @@ args = parser.parse_args()
 
 import os
 import shutil
+import subprocess
 import tomllib
 from collections import namedtuple
 
@@ -65,13 +66,31 @@ def start():
             file=sys.stderr)
         return 1
 
-    # Execute buildset
+    # Remove previously inserted content
     for f in os.listdir(src_path):
         if args.do_dry_run:
             print(f"remove: {os.path.relpath(src_path)}/{f}")
         else:
             os.remove(os.path.join(src_path, f))
 
+    # Reset any previously applied patches
+    patched_marker = os.path.join(project_root, ".patched")
+    if os.path.exists(patched_marker):
+        with open(patched_marker, "r") as f:
+            reset_dir = f.read()
+            if args.do_dry_run:
+                print(f"reset: {os.path.relpath(reset_dir)}")
+            else:
+                try:
+                    subprocess.run(["git", "reset", "--hard", "HEAD"],
+                        check=True, capture_output=True, cwd=reset_dir)
+                    os.remove(patched_marker)
+                except subprocess.CalledProcessError as e:
+                    print(f"Reset of a previous patch failed with returncode {e.returncode}!\n{e.output}", file=sys.stderr)
+                    return 1
+
+
+    # Set up new content
     watchface_dirpath = os.path.join(
         project_root,
         namemap[args.watchface].content["path"]["watchface_dirpath"])
@@ -94,6 +113,29 @@ def start():
         os.symlink(
             settings_template_filepath,
             copy_dest_path)
+
+    # Optional patching
+    try:
+        patch_filepath = os.path.join(
+            project_root,
+            namemap[args.watchface].content["patch"]["patch_filepath"])
+        apply_on_dirpath = os.path.join(
+            project_root,
+            namemap[args.watchface].content["patch"]["apply_on_dirpath"])
+        if args.do_dry_run:
+            print(f"patch: {os.path.relpath(patch_filepath)} on {os.path.relpath(apply_on_dirpath)}")
+        else:
+            try:
+                subprocess.run(["git", "apply", patch_filepath],
+                    check=True, capture_output=True, cwd=apply_on_dirpath)
+                with open(patched_marker, 'w') as f:
+                    f.write(apply_on_dirpath)
+            except subprocess.CalledProcessError as e:
+                print(f"Patch failed with returncode {e.returncode}!\n{e.stderr}",
+                    file=sys.stderr)
+                return 1
+    except KeyError:
+        pass
 
     return 0
 
