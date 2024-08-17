@@ -7,3 +7,6 @@
 [submodule "lib/watchy-starfield"]
 	path = lib/watchy-starfield
 	url = https://github.com/Prokuon/watchy-starfield
+[submodule "lib/Brainwork-for-Watchy"]
+	path = lib/Brainwork-for-Watchy
+	url = https://github.com/BraininaBowl/Brainwork-for-Watchy.git
