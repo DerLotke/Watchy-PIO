@@ -72,9 +72,11 @@ def start():
         else:
             os.remove(os.path.join(src_path, f))
 
-    watchface_dirpath = namemap[args.watchface].content["path"]["watchface_dirpath"]
+    watchface_dirpath = os.path.join(
+        project_root,
+        namemap[args.watchface].content["path"]["watchface_dirpath"])
     if namemap[args.watchface].content["path"]["uses_folder_hierarchy"]:
-        watchface_dirpath = os.path.join(project_root, watchface_dirpath, args.watchface)
+        watchface_dirpath = os.path.join(watchface_dirpath, args.watchface)
     for f in os.listdir(watchface_dirpath):
         if f != "settings.h":
             if args.do_dry_run:
