@@ -23,3 +23,8 @@ Watchy is a fully open source e-paper watch. Find out more at [**https://watchy.
 3. Execute the configure script. A list of available watchfaces can be received via `./configure --list`, you can then use one of these names as an argument (e.g. `./configure 7_SEG`)
 4. Build your watchface and upload it to your device (as convenience, you may use `make` and `make upload` for these tasks)
 6. Have fun!
+
+## Note on Settings Management
+
+In order to avoid your `settings.h` being rewritten everytime you reconfigure the project, there is a template file present under `templates/settings.h.template` which you may edit.
+This file will always be used instead of any `settings.h` file present in the watchface source.
