@@ -78,7 +78,7 @@ def start():
     if namemap[args.watchface].content["path"]["uses_folder_hierarchy"]:
         watchface_dirpath = os.path.join(watchface_dirpath, args.watchface)
     for f in os.listdir(watchface_dirpath):
-        if f != "settings.h":
+        if f != "settings.h" and f[0] != '.':
             if args.do_dry_run:
                 print(f"symlink: {os.path.relpath(watchface_dirpath)}/{f} -> {os.path.relpath(src_path)}/{f}")
             else:
