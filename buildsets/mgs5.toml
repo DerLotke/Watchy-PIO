@@ -1,0 +1,6 @@
+names=["MGSV"]
+
+[path]
+watchface_dirpath = "lib/watchy-MGSV"
+settings_template_filepath = "templates/settings.h.template"
+uses_folder_hierarchy = false

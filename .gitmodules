@@ -10,3 +10,6 @@
 [submodule "lib/Brainwork-for-Watchy"]
 	path = lib/Brainwork-for-Watchy
 	url = https://github.com/BraininaBowl/Brainwork-for-Watchy.git
+[submodule "lib/watchy-MGSV"]
+	path = lib/watchy-MGSV
+	url = https://github.com/Prokuon/watchy-MGSV.git
