@@ -57,7 +57,9 @@ def start():
             namemap[name] = bset
 
     if args.do_list_bsets:
-        print("\n".join(namemap.keys()))
+        watchfaces = list(namemap.keys())
+        watchfaces.sort()
+        print("\n".join(watchfaces))
         return 0
 
     # Check if user requested something out of these sets
