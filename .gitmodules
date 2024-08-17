@@ -1,3 +1,6 @@
 [submodule "lib/Watchy"]
 	path = lib/Watchy
 	url = https://github.com/sqfmi/Watchy.git
+[submodule "lib/watchy-pipboy"]
+	path = lib/watchy-pipboy
+	url = https://github.com/sqfmi/watchy-pipboy

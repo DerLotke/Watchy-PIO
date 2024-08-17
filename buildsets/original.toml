@@ -1,0 +1,6 @@
+names=["7_SEG", "Basic", "DOS", "MacPaint", "Mario", "Pokemon", "StarryHorizon", "Tetris"]
+
+[path]
+watchface_dirpath = "lib/Watchy/examples/WatchFaces"
+settings_template_filepath = "templates/settings.h.template"
+uses_folder_hierarchy = true

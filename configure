@@ -1,20 +1,100 @@
-#!/bin/bash
+#!/usr/bin/env python
+# requires at least Python 3.11
 
-TEMPLATES_FOLDER="templates"
-WATCHFACES_FOLDER="lib/Watchy/examples/WatchFaces"
-MODULES=(7_SEG Basic DOS MacPaint Mario Pokemon StarryHorizon Tetris)
+import sys
+assert sys.version_info >= (3, 11)
 
-# Check if user wants a module we have
-if [[ ! " ${MODULES[@]} " =~ " $1 " ]]; then
-    echo "Error: $1 is not a valid watchface" >&2
-    exit 1
-fi
+import argparse
+parser = argparse.ArgumentParser(
+    prog="configure",
+    description="Sets up the watchface for the build",
+    epilog="by Daniel Wohllebe"
+)
+parser.add_argument("watchface", nargs="?", default="UNSPECIFIED")
+parser.add_argument("-l", "--list", dest="do_list_bsets", action="store_true")
+parser.add_argument("-d", "--dry-run", dest="do_dry_run", action="store_true")
+args = parser.parse_args()
 
-rm -rf src/*
 
-for FILE in $(ls "${WATCHFACES_FOLDER}/$1"); do
-    test "$FILE" != "settings.h" && ln -s $(readlink -f "${WATCHFACES_FOLDER}/$1/${FILE}") "src/${FILE}"
-    cp "${TEMPLATES_FOLDER}/settings.h.template" "src/settings.h"
-done
+# ----------------------------------------------------
 
-echo "Finished populating src/"
+import os
+import shutil
+import tomllib
+from collections import namedtuple
+
+project_root = os.path.dirname(os.path.abspath(__file__))
+buildset_path = os.path.join(project_root, "buildsets")
+src_path = os.path.join(project_root, "src")
+
+
+def parse_buildset(path):
+    with open(path, 'rb') as f:
+        bdict = tomllib.load(f)
+        return bdict
+
+
+def start():
+    # Load buildsets
+    bsets = []
+    Buildset = namedtuple("Buildset", ["name", "content"])
+    for bfile in os.listdir(buildset_path):
+        if bfile.endswith(".toml"):
+            bsets.append( Buildset(
+                bfile.split('.')[0],
+                parse_buildset(os.path.join(buildset_path, bfile))
+            ) )
+
+    # Parse buildsets and create a map of watchfaces to each set
+    namemap = {}
+    for bset in bsets:
+        for name in bset.content["names"]:
+            if name in namemap:
+                print(f"Error: watchface {name} found multiple times in buildsets",
+                      file=sys.stderr)
+                return 1
+            namemap[name] = bset
+
+    if args.do_list_bsets:
+        print("\n".join(namemap.keys()))
+        return 0
+
+    # Check if user requested something out of these sets
+    if args.watchface not in namemap:
+        print(f"Error: watchface {args.watchface} is unknown\nUse `configure --list` to show available watchfaces",
+            file=sys.stderr)
+        return 1
+
+    # Execute buildset
+    for f in os.listdir(src_path):
+        if args.do_dry_run:
+            print(f"remove: {os.path.relpath(src_path)}/{f}")
+        else:
+            os.remove(os.path.join(src_path, f))
+
+    watchface_dirpath = namemap[args.watchface].content["path"]["watchface_dirpath"]
+    if namemap[args.watchface].content["path"]["uses_folder_hierarchy"]:
+        watchface_dirpath = os.path.join(project_root, watchface_dirpath, args.watchface)
+    for f in os.listdir(watchface_dirpath):
+        if f != "settings.h":
+            if args.do_dry_run:
+                print(f"symlink: {os.path.relpath(watchface_dirpath)}/{f} -> {os.path.relpath(src_path)}/{f}")
+            else:
+                os.symlink(os.path.join(watchface_dirpath, f), os.path.join(src_path, f))
+
+    settings_template_filepath = os.path.join(
+        project_root,
+        namemap[args.watchface].content["path"]["settings_template_filepath"])
+    copy_dest_path = os.path.join(src_path, "settings.h")
+    if args.do_dry_run:
+        print(f"symlink: {os.path.relpath(settings_template_filepath)} -> {os.path.relpath(copy_dest_path)}")
+    else:
+        os.symlink(
+            settings_template_filepath,
+            copy_dest_path)
+
+    return 0
+
+
+if __name__ == "__main__":
+        exit(start())
