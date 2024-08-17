@@ -1,0 +1,6 @@
+names=["Starfield"]
+
+[path]
+watchface_dirpath = "lib/watchy-starfield"
+settings_template_filepath = "templates/settings.h.template"
+uses_folder_hierarchy = false
