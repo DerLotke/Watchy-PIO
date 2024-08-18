@@ -16,3 +16,6 @@
 [submodule "lib/Slacker"]
 	path = lib/Slacker
 	url = https://github.com/uCBill/Slacker.git
+[submodule "lib/steps"]
+	path = lib/steps
+	url = https://github.com/MartMarq/steps.git
