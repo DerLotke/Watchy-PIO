@@ -19,3 +19,6 @@
 [submodule "lib/steps"]
 	path = lib/steps
 	url = https://github.com/MartMarq/steps.git
+[submodule "lib/watchy_moto"]
+	path = lib/watchy_moto
+	url = https://github.com/b-bayport/watchy_moto.git
