@@ -13,3 +13,6 @@
 [submodule "lib/watchy-MGSV"]
 	path = lib/watchy-MGSV
 	url = https://github.com/Prokuon/watchy-MGSV.git
+[submodule "lib/Slacker"]
+	path = lib/Slacker
+	url = https://github.com/uCBill/Slacker.git

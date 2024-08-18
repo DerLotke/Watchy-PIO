@@ -1,0 +1,6 @@
+names=["Slacker"]
+
+[path]
+watchface_dirpath = "lib/Slacker"
+settings_template_filepath = "templates/settings.h.template"
+uses_folder_hierarchy = false
