@@ -1,6 +1,7 @@
 names=["Moto"]
 
 [path]
+library_dirpath = "lib/watchy_moto"
 watchface_dirpath = "lib/watchy_moto"
 settings_template_filepath = "templates/settings.h.template"
 uses_folder_hierarchy = false

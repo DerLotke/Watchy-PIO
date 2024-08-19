@@ -1,6 +1,7 @@
 names=["Brainwork"]
 
 [path]
+library_dirpath = "lib/Brainwork-for-Watchy"
 watchface_dirpath = "lib/Brainwork-for-Watchy"
 settings_template_filepath = "templates/settings.h.template"
 uses_folder_hierarchy = false

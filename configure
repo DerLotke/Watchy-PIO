@@ -91,6 +91,19 @@ def start():
                     print(f"Reset of a previous patch failed with returncode {e.returncode}!\n{e.output}", file=sys.stderr)
                     return 1
 
+    # Intialize/update relevant submodule
+    library_dirpath = os.path.join(project_root, namemap[args.watchface].content["path"]["library_dirpath"])
+    if args.do_dry_run:
+        print(f"update-submodule: {os.path.relpath(library_dirpath)}")
+    else:
+        try:
+            subprocess.run(["git", "submodule", "update", "--init", "lib/Watchy"], # Main module Watchy will always be needed
+                check=True, capture_output=True, cwd=project_root)
+            subprocess.run(["git", "submodule", "update", "--init", library_dirpath],
+                check=True, capture_output=True, cwd=project_root)
+        except subprocess.CalledProcessError as e:
+            print(f"Initializing or updating submodule failed with returncode {e.returncode}!\n{e.output}", file=sys.stderr)
+            return 1
 
     # Set up new content
     watchface_dirpath = os.path.join(
