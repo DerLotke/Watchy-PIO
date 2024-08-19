@@ -13,16 +13,16 @@ Watchy is a fully open source e-paper watch. Find out more at [**https://watchy.
 ## Requirements
 
 * PlatformIO
-* Python3.11 or newer
-* Watchy (using an ESP32-S3)
+* Python 3.11 or newer
+* Watchy v3 (using an ESP32-S3)
 
 ## Getting Started
 
-1. Initialize the submodules by using `git submodule update --init`
-2. Initialize the project with `pio project init`
-3. Execute the configure script. A list of available watchfaces can be received via `./configure --list`, you can then use one of these names as an argument (e.g. `./configure 7_SEG`)
-4. Build your watchface and upload it to your device (as convenience, you may use `make` and `make upload` for these tasks)
-6. Have fun!
+1. Clone this project with `git clone`. A lot of functionality of the configure script abuses git commands to modify the submodules, so keep that in mind. ;)
+2. Initialize the project with `pio project init` for your IDE.
+3. Execute the configure script. A list of available watchfaces can be received via `./configure --list`. You can then use one of these names as an argument (e.g. `./configure 7_SEG`).
+4. Build your watchface and upload it to your device (as convenience, you may use `make` and `make upload` for these tasks if you have initialized the project with `pio project init --ide vim`).
+5. Have fun!
 
 ## Note on Settings Management
 
